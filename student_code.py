@@ -128,6 +128,14 @@ class KnowledgeBase(object):
         printv("Retracting {!r}", 0, verbose, [fact_or_rule])
         ####################################################
         # Student code goes here
+        if factq(fact_or_rule): 
+            if fact_or_rule.asserted == True and fact_or_rule.supported_by == []:
+
+                self.facts.remove(fact_or_rule)
+
+
+
+
         
 
 class InferenceEngine(object):
@@ -146,3 +154,22 @@ class InferenceEngine(object):
             [fact.statement, rule.lhs, rule.rhs])
         ####################################################
         # Student code goes here
+        bindings = match(fact.statement, rule.lhs[0])
+
+        if bindings:
+            supportedby = [[rule, fact]]
+            newr = instantiate(rule.rhs, bindings)
+            if len(rule.lhs) == 1:
+                new_fact = Fact(newr, supportedby)
+                fact.supports_facts.append(new_fact)
+                rule.supports_facts.append(new_fact)
+                kb.kb_add(new_fact)
+            else:
+                newl = []
+                for each in rule.lhs[1:]:
+                    newl.append(instantiate(each, bindings))
+                new_rule = Rule([newl, newr], supportedby)
+                fact.supports_rules.append(new_rule)
+                rule.supports_rules.append(new_rule)
+                kb.kb_add(new_rule)
+

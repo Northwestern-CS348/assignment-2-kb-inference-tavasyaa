@@ -46,6 +46,7 @@ class KBTest(unittest.TestCase):
         ask1 = read.parse_input("fact: (grandmotherof ada ?X)")
         print(' Asking if', ask1)
         answer = self.KB.kb_ask(ask1)
+        print(answer)
         self.assertEqual(str(answer[0]), "?X : felix")
         self.assertEqual(str(answer[1]), "?X : chen")
 
